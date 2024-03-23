@@ -23,11 +23,11 @@ def create_app():
 
     @fast_api.on_event("startup")
     async def startup_event():
-        kafka_consumer_service = KafkaConsumerService('empresaTopic')
+        kafka_consumer_service = KafkaConsumerService('empresaPublisherTopic')
         # Registramos la tarea del consumidor para ejecutarse como una tarea de fondo.
         await asyncio.create_task(kafka_consumer_service.consume_messages(procesar_empresa))
 
         global kafka_producer_service
-        kafka_producer_service = KafkaProducerService('localhost:9092', 'resumeTopic22')
+        kafka_producer_service = KafkaProducerService('localhost:9092', 'empresaListenerTopic')
         await kafka_producer_service.start()
     return fast_api
