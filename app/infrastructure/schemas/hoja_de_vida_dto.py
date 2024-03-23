@@ -29,9 +29,10 @@ class ProcesoEntrevistaDto(BaseModel):
     error: Optional[str] = None
 
 
-class MensajeAnalizadorDto(BaseModel):
+class MensajeAnalizadorEmpresaDto(BaseModel):
     proceso_entrevista: ProcesoEntrevistaDto
     id_entrevista: Optional[str] = None
-
+    formulario: FormularioDto
+    preguntas: List[str] = []
 
 
