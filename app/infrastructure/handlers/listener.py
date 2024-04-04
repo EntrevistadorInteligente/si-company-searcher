@@ -1,12 +1,11 @@
 from fastapi import Depends, APIRouter
 
-from app.application.services.kafka_producer_service import KafkaProducerService
+from app.infrastructure.jms.kafka_producer_service import KafkaProducerService
 from app.application.services.investigar_empresa_service import InvestigarEmpresaService
 from app.infrastructure.container import Container
 from dependency_injector.wiring import Provide, inject
 import json
-from app.infrastructure.schemas.hoja_de_vida_dto import ProcesoEntrevistaDto, EstadoProcesoEnum, FormularioDto, \
-    PerfilEntrevistaDto
+from app.infrastructure.schemas.informacion_empresa_dto import ProcesoEntrevistaDto, EstadoProcesoEnum, PerfilEntrevistaDto
 
 router = APIRouter(
     prefix='/analizador-empresa',
@@ -32,16 +31,14 @@ async def procesar_empresa(message,
         formulario=data.get('formulario')
     )
 
-    preguntas = await investigar_empresa_service.execute(perfil_entrevista_dto.formulario)
+    id_informacion_empresa = await investigar_empresa_service.ejecutar(perfil_entrevista_dto.formulario)
 
     proceso_entrevista = ProcesoEntrevistaDto(
         uuid=perfil_entrevista_dto.evento_entrevista_id,
         estado=EstadoProcesoEnum.FN,
-        fuente="ANALIZADOR"
+        fuente="ANALIZADOR_EMPRESA"
     )
 
-    await kafka_producer_service.send_message({
-        "proceso_entrevista": proceso_entrevista.dict(),
-        "id_entrevista": id_entrevista,
-        "formulario": perfil_entrevista_dto.formulario.dict(),
-        "preguntas": preguntas})
+    await kafka_producer_service.send_message({"proceso_entrevista": proceso_entrevista.dict(),
+                                               "id_entrevista": id_entrevista,
+                                               "informacion_empresa": id_informacion_empresa.dict()})
