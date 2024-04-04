@@ -22,4 +22,4 @@ class InformacionEmpresaMongoRepository(InformacionEmpresaRepository):
             informacion_empresa_vect=informacion_empresa.informacion_empresa_vect
         )
         result = await collection.insert_one(proceso_entrevista.dict())
-        return result.inserted_id
+        return str(result.inserted_id)

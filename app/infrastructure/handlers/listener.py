@@ -31,16 +31,14 @@ async def procesar_empresa(message,
         formulario=data.get('formulario')
     )
 
-    preguntas = await investigar_empresa_service.ejecutar(perfil_entrevista_dto.formulario)
+    id_informacion_empresa = await investigar_empresa_service.ejecutar(perfil_entrevista_dto.formulario)
 
     proceso_entrevista = ProcesoEntrevistaDto(
         uuid=perfil_entrevista_dto.evento_entrevista_id,
         estado=EstadoProcesoEnum.FN,
-        fuente="ANALIZADOR"
+        fuente="ANALIZADOR_EMPRESA"
     )
 
-    await kafka_producer_service.send_message({
-        "proceso_entrevista": proceso_entrevista.dict(),
-        "id_entrevista": id_entrevista,
-        "formulario": perfil_entrevista_dto.formulario.dict(),
-        "preguntas": preguntas})
+    await kafka_producer_service.send_message({"proceso_entrevista": proceso_entrevista.dict(),
+                                               "id_entrevista": id_entrevista,
+                                               "informacion_empresa": id_informacion_empresa.dict()})

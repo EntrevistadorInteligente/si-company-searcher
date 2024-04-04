@@ -10,6 +10,15 @@ class FormularioDto(BaseModel):
     pais: Optional[str] = None
 
 
+class InformacionEmpresaDto(BaseModel):
+    id_informacion_empresa_rag: Optional[str] = None
+    empresa: Optional[str] = None
+    perfil: Optional[str] = None
+    seniority: Optional[str] = None
+    pais: Optional[str] = None
+    preguntas: List[str] = []
+
+
 class PerfilEntrevistaDto(BaseModel):
     id_entrevista: Optional[str] = None
     evento_entrevista_id: Optional[str] = None
