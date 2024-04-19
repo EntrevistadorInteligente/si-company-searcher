@@ -4,7 +4,7 @@ from app.domain.exceptions import PriceIsLessThanOrEqualToZero, StockIsLessThanO
 class InformacionEmpresa:
 
     def __init__(self, empresa: str, perfil: str, seniority: str, pais: str,
-                 informacion_empresa_vect: list[str]):
+                 descripcion_vacante: str, informacion_empresa_vect: list[str]):
         self.__validate_price(empresa)
         self.__validate_stock(informacion_empresa_vect)
 
@@ -12,6 +12,7 @@ class InformacionEmpresa:
         self.perfil = perfil
         self.seniority = seniority
         self.pais = pais
+        self.descripcion_vacante = descripcion_vacante
         self.informacion_empresa_vect = informacion_empresa_vect
 
     @staticmethod
@@ -28,6 +29,6 @@ class InformacionEmpresa:
 class InformacionEmpresaFactory:
 
     @staticmethod
-    def create(empresa: str, perfil: str, seniority: str, pais: str,
+    def create(empresa: str, perfil: str, seniority: str, pais: str, descripcion_vacante: str,
                informacion_empresa_vect: list[str]) -> InformacionEmpresa:
-        return InformacionEmpresa(empresa, perfil, seniority, pais, informacion_empresa_vect)
+        return InformacionEmpresa(empresa, perfil, seniority, pais, descripcion_vacante, informacion_empresa_vect)

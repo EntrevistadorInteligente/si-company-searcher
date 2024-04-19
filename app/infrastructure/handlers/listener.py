@@ -41,4 +41,4 @@ async def procesar_empresa(message,
 
     await kafka_producer_service.send_message({"proceso_entrevista": proceso_entrevista.dict(),
                                                "id_entrevista": id_entrevista,
-                                               "informacion_empresa": id_informacion_empresa.dict()})
+                                               "id_informacion_empresa_rag": id_informacion_empresa})

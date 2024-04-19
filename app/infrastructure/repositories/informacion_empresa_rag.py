@@ -19,6 +19,7 @@ class InformacionEmpresaMongoRepository(InformacionEmpresaRepository):
             perfil=informacion_empresa.perfil,
             seniority=informacion_empresa.seniority,
             pais=informacion_empresa.pais,
+            descripcion_vacante=informacion_empresa.descripcion_vacante,
             informacion_empresa_vect=informacion_empresa.informacion_empresa_vect
         )
         result = await collection.insert_one(proceso_entrevista.dict())

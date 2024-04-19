@@ -7,5 +7,6 @@ class InformacionEmpresaEntityRag(BaseModel):
     perfil: Optional[str] = None
     seniority: Optional[str] = None
     pais: Optional[str] = None
+    descripcion_vacante: Optional[str] = None
     informacion_empresa_vect: Optional[list[str]] = None
 
