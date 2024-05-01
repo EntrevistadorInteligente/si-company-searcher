@@ -28,6 +28,6 @@ def create_app():
         await asyncio.create_task(kafka_consumer_service.consume_messages(procesar_empresa))
 
         global kafka_producer_service
-        kafka_producer_service = KafkaProducerService('localhost:9092', 'empresaListenerTopic')
+        kafka_producer_service = KafkaProducerService('humble-hornet-11005-us1-kafka.upstash.io:9092', 'empresaListenerTopic')
         await kafka_producer_service.start()
     return fast_api

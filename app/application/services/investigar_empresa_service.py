@@ -25,7 +25,7 @@ class InvestigarEmpresaService:
 
         text_chunks = text_splitter.split_text(preguntas)
 
-        informacion_empresa = InformacionEmpresaFactory.create(formulario.empresa, formulario.perfil,
+        informacion_empresa = await InformacionEmpresaFactory.create(formulario.empresa, formulario.perfil,
                                                                formulario.seniority, formulario.pais,
                                                                formulario.descripcion_vacante, text_chunks)
 

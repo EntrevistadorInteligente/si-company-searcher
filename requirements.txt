@@ -1,8 +1,8 @@
 dependency-injector==4.41.0
-confluent-kafka==2.3.0
 fastapi~=0.109.0
 uvicorn==0.18.3
 pydantic~=1.10.14
-aiokafka~=0.10.0
 motor~=3.4.0
+kafka-python==2.0.2
 langchain==0.0.184
+aiokafka~=0.10.0

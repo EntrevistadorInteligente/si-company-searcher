@@ -36,6 +36,6 @@ class Container(containers.DeclarativeContainer):
 
     kafka_producer_service = providers.Singleton(
         KafkaProducerService,
-        bootstrap_servers='localhost:9092',
+        bootstrap_servers='humble-hornet-11005-us1-kafka.upstash.io:9092',
         topic='empresaListenerTopic',
     )

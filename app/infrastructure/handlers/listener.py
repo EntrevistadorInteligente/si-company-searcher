@@ -5,7 +5,8 @@ from app.application.services.investigar_empresa_service import InvestigarEmpres
 from app.infrastructure.container import Container
 from dependency_injector.wiring import Provide, inject
 import json
-from app.infrastructure.schemas.informacion_empresa_dto import ProcesoEntrevistaDto, EstadoProcesoEnum, PerfilEntrevistaDto
+from app.infrastructure.schemas.informacion_empresa_dto import (ProcesoEntrevistaDto, EstadoProcesoEnum,
+                                                                PerfilEntrevistaDto)
 
 router = APIRouter(
     prefix='/analizador-empresa',
@@ -16,12 +17,11 @@ router = APIRouter(
 @router.get('/', response_model=str)
 @inject
 async def procesar_empresa(message,
-                           investigar_empresa_service:
-                           InvestigarEmpresaService = Depends(Provide[Container.investigar_empresa_service]),
-                           kafka_producer_service:
-                           KafkaProducerService = Depends(Provide[Container.kafka_producer_service])
-                           ):
-    data = json.loads(message.value.decode('utf-8'))
+                     investigar_empresa_service:
+                     InvestigarEmpresaService = Depends(Provide[Container.investigar_empresa_service]),
+                     kafka_producer_service:
+                     KafkaProducerService = Depends(Provide[Container.kafka_producer_service])):
+    data = json.loads(message.decode('utf-8'))
 
     id_entrevista = data.get('id_entrevista')
 
@@ -40,5 +40,6 @@ async def procesar_empresa(message,
     )
 
     await kafka_producer_service.send_message({"proceso_entrevista": proceso_entrevista.dict(),
-                                               "id_entrevista": id_entrevista,
-                                               "id_informacion_empresa_rag": id_informacion_empresa})
+                                          "id_entrevista": id_entrevista,
+                                          "id_informacion_empresa_rag": id_informacion_empresa},
+                                        "empresaListenerTopic")

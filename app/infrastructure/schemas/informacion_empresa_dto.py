@@ -29,7 +29,6 @@ class ProcesoEntrevistaDto(BaseModel):
     uuid: Optional[str] = None
     estado: EstadoProcesoEnum
     fuente: Optional[str] = None
-    error: Optional[str] = None
 
 
 class MensajeAnalizadorEmpresaDto(BaseModel):

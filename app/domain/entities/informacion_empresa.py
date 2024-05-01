@@ -29,6 +29,6 @@ class InformacionEmpresa:
 class InformacionEmpresaFactory:
 
     @staticmethod
-    def create(empresa: str, perfil: str, seniority: str, pais: str, descripcion_vacante: str,
+    async def create(empresa: str, perfil: str, seniority: str, pais: str, descripcion_vacante: str,
                informacion_empresa_vect: list[str]) -> InformacionEmpresa:
         return InformacionEmpresa(empresa, perfil, seniority, pais, descripcion_vacante, informacion_empresa_vect)
