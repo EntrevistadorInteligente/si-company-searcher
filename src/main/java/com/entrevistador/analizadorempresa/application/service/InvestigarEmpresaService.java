@@ -6,7 +6,7 @@ import com.entrevistador.analizadorempresa.domain.model.dto.MensajeAnalizadorEmp
 import com.entrevistador.analizadorempresa.domain.model.dto.PosicionEntrevistaDto;
 import com.entrevistador.analizadorempresa.domain.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.analizadorempresa.domain.model.enums.EstadoEntrevistaEnum;
-import com.entrevistador.analizadorempresa.domain.port.AnalizadorEmpresaDao;
+import com.entrevistador.analizadorempresa.domain.service.CrearInvestigarEmpresaService;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.jms.JmsPublisherAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 public class InvestigarEmpresaService implements InvestigarEmpresa {
     public static final String ANALIZADOR_EMPRESA = "ANALIZADOR_EMPRESA";
 
-    private final AnalizadorEmpresaDao analizadorEmpresaDao;
+    private final CrearInvestigarEmpresaService crearInvestigarEmpresaService;
     private final JmsPublisherAdapter jmsPublisherAdapter;
 
     @Override
@@ -27,7 +27,7 @@ public class InvestigarEmpresaService implements InvestigarEmpresa {
     }
 
     private Mono<MensajeAnalizadorEmpresaDto> prepararCreacion(PosicionEntrevistaDto posicionEntrevistaDto) {
-        return this.analizadorEmpresaDao.create(posicionEntrevistaDto.getFormulario())
+        return this.crearInvestigarEmpresaService.create(posicionEntrevistaDto.getFormulario())
                 .zipWith(Mono.just(posicionEntrevistaDto), this::crearMensajeAnalizadorEmpresa);
     }
 

@@ -2,7 +2,7 @@ package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
 import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
-import com.entrevistador.analizadorempresa.domain.port.AnalizadorEmpresaDao;
+import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDao;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntityRag;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.AnalizadorEmpresaRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class AnalizadorEmpresaBdDao implements AnalizadorEmpresaDao {
+public class InformacionEmpresaBdDao implements InformacionEmpresaDao {
     private final AnalizadorEmpresaRepository analizadorEmpresaRepository;
 
     private final List<String> preguntas = new ArrayList<>() {{
@@ -25,13 +25,13 @@ public class AnalizadorEmpresaBdDao implements AnalizadorEmpresaDao {
     }};
 
     @Override
-    public Mono<InformacionEmpresaDto> create(InformacionEmpresaDto analizadorEmpresaDto) {
-        return Mono.just(analizadorEmpresaDto)
-                .map(informacionEmpresaDto -> InformacionEmpresa.builder()
-                        .empresa(informacionEmpresaDto.getEmpresa())
-                        .perfil(informacionEmpresaDto.getPerfil())
-                        .seniority(informacionEmpresaDto.getSeniority())
-                        .pais(informacionEmpresaDto.getPais())
+    public Mono<InformacionEmpresaDto> create(InformacionEmpresaDto informacionEmpresaDto) {
+        return Mono.just(informacionEmpresaDto)
+                .map(informacionEmpresa -> InformacionEmpresa.builder()
+                        .empresa(informacionEmpresa.getEmpresa())
+                        .perfil(informacionEmpresa.getPerfil())
+                        .seniority(informacionEmpresa.getSeniority())
+                        .pais(informacionEmpresa.getPais())
                         .informacionEmpresaVect(preguntas)
                         .build())
                 .doOnNext(informacionEmpresa -> InformacionEmpresa.validatePrice(informacionEmpresa.getEmpresa()))
@@ -46,10 +46,10 @@ public class AnalizadorEmpresaBdDao implements AnalizadorEmpresaDao {
                 .flatMap(this.analizadorEmpresaRepository::save)
                 .map(informacionEmpresaEntityRag -> InformacionEmpresaDto.builder()
                         .idInformacionEmpresaRag(informacionEmpresaEntityRag.getUuid())
-                        .empresa(analizadorEmpresaDto.getEmpresa())
-                        .perfil(analizadorEmpresaDto.getPerfil())
-                        .seniority(analizadorEmpresaDto.getSeniority())
-                        .pais(analizadorEmpresaDto.getPais())
+                        .empresa(informacionEmpresaDto.getEmpresa())
+                        .perfil(informacionEmpresaDto.getPerfil())
+                        .seniority(informacionEmpresaDto.getSeniority())
+                        .pais(informacionEmpresaDto.getPais())
                         .preguntas(preguntas)
                         .build());
     }
