@@ -3,7 +3,7 @@ package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
 import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
 import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDao;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntityRag;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.AnalizadorEmpresaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -36,7 +36,7 @@ public class InformacionEmpresaBdDao implements InformacionEmpresaDao {
                         .build())
                 .doOnNext(informacionEmpresa -> InformacionEmpresa.validatePrice(informacionEmpresa.getEmpresa()))
                 .doOnNext(informacionEmpresa -> InformacionEmpresa.validateStock(informacionEmpresa.getInformacionEmpresaVect()))
-                .map(informacionEmpresa -> InformacionEmpresaEntityRag.builder()
+                .map(informacionEmpresa -> InformacionEmpresaEntity.builder()
                         .empresa(informacionEmpresa.getEmpresa())
                         .perfil(informacionEmpresa.getPerfil())
                         .seniority(informacionEmpresa.getSeniority())
@@ -44,8 +44,8 @@ public class InformacionEmpresaBdDao implements InformacionEmpresaDao {
                         .informacionEmpresaVect(informacionEmpresa.getInformacionEmpresaVect())
                         .build())
                 .flatMap(this.analizadorEmpresaRepository::save)
-                .map(informacionEmpresaEntityRag -> InformacionEmpresaDto.builder()
-                        .idInformacionEmpresaRag(informacionEmpresaEntityRag.getUuid())
+                .map(informacionEmpresaEntity -> InformacionEmpresaDto.builder()
+                        .idInformacionEmpresaRag(informacionEmpresaEntity.getUuid())
                         .empresa(informacionEmpresaDto.getEmpresa())
                         .perfil(informacionEmpresaDto.getPerfil())
                         .seniority(informacionEmpresaDto.getSeniority())

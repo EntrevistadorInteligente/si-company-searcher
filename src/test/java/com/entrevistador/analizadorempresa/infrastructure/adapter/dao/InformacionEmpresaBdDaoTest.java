@@ -2,7 +2,7 @@ package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
 import com.entrevistador.analizadorempresa.domain.exception.PriceIsLessThanOrEqualToZero;
 import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntityRag;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.AnalizadorEmpresaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +27,8 @@ class InformacionEmpresaBdDaoTest {
 
     @Test
     void testCreate() {
-        InformacionEmpresaEntityRag informacionEmpresaEntityRag = InformacionEmpresaEntityRag.builder().empresa("any").build();
-        when(this.analizadorEmpresaRepository.save(any())).thenReturn(Mono.just(informacionEmpresaEntityRag));
+        InformacionEmpresaEntity informacionEmpresaEntity = InformacionEmpresaEntity.builder().empresa("any").build();
+        when(this.analizadorEmpresaRepository.save(any())).thenReturn(Mono.just(informacionEmpresaEntity));
 
         InformacionEmpresaDto informacionEmpresaDto = InformacionEmpresaDto.builder()
                 .empresa("any")

@@ -12,9 +12,9 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@Document(collection = "informacion_empresa_rag")
+@Document(collection = "informacion_empresa")
 @AllArgsConstructor
-public class InformacionEmpresaEntityRag {
+public class InformacionEmpresaEntity {
     @Id
     private String uuid;
     private String empresa;
