@@ -50,7 +50,6 @@ public class InformacionEmpresaBdDao implements InformacionEmpresaDao {
                         .perfil(informacionEmpresaDto.getPerfil())
                         .seniority(informacionEmpresaDto.getSeniority())
                         .pais(informacionEmpresaDto.getPais())
-                        .preguntas(preguntas)
                         .build());
     }
 }

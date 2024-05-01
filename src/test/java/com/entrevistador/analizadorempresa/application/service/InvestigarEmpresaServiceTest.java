@@ -1,6 +1,7 @@
 package com.entrevistador.analizadorempresa.application.service;
 
 import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
+import com.entrevistador.analizadorempresa.domain.model.dto.MensajeAnalizadorEmpresaDto;
 import com.entrevistador.analizadorempresa.domain.model.dto.PosicionEntrevistaDto;
 import com.entrevistador.analizadorempresa.domain.service.CrearInvestigarEmpresaService;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.jms.JmsPublisherAdapter;
@@ -28,7 +29,7 @@ class InvestigarEmpresaServiceTest {
 
     @Test
     void testEjecutar() {
-        when(this.crearInvestigarEmpresaService.create(any())).thenReturn(Mono.just(InformacionEmpresaDto.builder().build()));
+        when(this.crearInvestigarEmpresaService.create(any())).thenReturn(Mono.just(MensajeAnalizadorEmpresaDto.builder().build()));
         when(this.jmsPublisherAdapter.empresaListenerTopic(any())).thenReturn(Mono.empty());
 
         Mono<Void> publisher = this.investigarEmpresaService.ejecutar(PosicionEntrevistaDto.builder().build());

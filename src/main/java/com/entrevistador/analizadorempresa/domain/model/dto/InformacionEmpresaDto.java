@@ -21,5 +21,4 @@ public class InformacionEmpresaDto {
     private String perfil;
     private String seniority;
     private String pais;
-    private List<String> preguntas;
 }
