@@ -1,13 +1,9 @@
-FROM python:3.11-alpine
+FROM amazoncorretto:17-alpine3.18-jdk
 
-WORKDIR /code
+EXPOSE 8081
 
-COPY requirements.txt /requirements.txt
+RUN mkdir -p /app/
 
-ADD ./app /code/app
+COPY target/analizador-empresa-0.0.1-SNAPSHOT.jar /app/analizador-empresa.jar
 
-RUN pip install -r /requirements.txt
-
-EXPOSE 8000
-
-CMD ["uvicorn", "app.main:application", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["java", "-jar", "/app/analizador-empresa.jar"]
