@@ -14,6 +14,7 @@ public class InformacionEmpresa {
     private String perfil;
     private String seniority;
     private String pais;
+    private String descripcionVacante;
     private List<String> informacionEmpresaVect;
 
     public static void validatePrice(String idEmpresa) {

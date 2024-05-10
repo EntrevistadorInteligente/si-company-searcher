@@ -1,6 +1,6 @@
 FROM amazoncorretto:17-alpine3.18-jdk
 
-EXPOSE 8081
+EXPOSE 8083
 
 RUN mkdir -p /app/
 
