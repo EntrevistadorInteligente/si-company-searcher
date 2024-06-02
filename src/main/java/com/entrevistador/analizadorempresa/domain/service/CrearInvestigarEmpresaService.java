@@ -6,6 +6,7 @@ import com.entrevistador.analizadorempresa.domain.model.dto.PosicionEntrevistaDt
 import com.entrevistador.analizadorempresa.domain.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.analizadorempresa.domain.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDao;
+import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDaoPostgres;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -13,10 +14,11 @@ import reactor.core.publisher.Mono;
 public class CrearInvestigarEmpresaService {
     private static final String ANALIZADOR_EMPRESA = "ANALIZADOR_EMPRESA";
 
-    private final InformacionEmpresaDao informacionEmpresaDao;
+    //private final InformacionEmpresaDao informacionEmpresaDao;
+    private final InformacionEmpresaDaoPostgres informacionEmpresaDaoPostgres;
 
     public Mono<MensajeAnalizadorEmpresaDto> create(PosicionEntrevistaDto posicionEntrevista) {
-        return this.informacionEmpresaDao.create(posicionEntrevista.getFormulario())
+        return this.informacionEmpresaDaoPostgres.create(posicionEntrevista.getFormulario())
                 .zipWith(Mono.just(posicionEntrevista), this::crearMensajeAnalizadorEmpresa);
     }
 
