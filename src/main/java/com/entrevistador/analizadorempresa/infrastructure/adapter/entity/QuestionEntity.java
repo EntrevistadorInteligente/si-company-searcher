@@ -10,19 +10,13 @@ import java.util.List;
 
 @Document(indexName = "interviews")
 @Data
-public class InterviewEntity {
+public class QuestionEntity {
 
-    @Id
-    private String id;
-    @Field(name = "company_name")
-    private String companyName;
-    private String title;
-    @Field(name = "score", type = FieldType.Double)
-    private double score;
-    @Field(name = "interview_text")
-    private String interviewText;
-    @Field(type = FieldType.Nested)
-    private List<QuestionEntity> questions;
+    @Field(name = "question_text", type = FieldType.Text)
+    private String questionText;
+
+    @Field(name = "question_title", type = FieldType.Text)
+    private String questionTitle;
 
 }
 
