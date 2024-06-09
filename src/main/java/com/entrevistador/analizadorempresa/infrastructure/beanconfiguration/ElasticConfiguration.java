@@ -48,4 +48,5 @@ public class ElasticConfiguration {
         return new ElasticsearchClient(getElasticsearchTransport());
     }
 
+
 }

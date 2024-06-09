@@ -1,22 +1,23 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.entity;
 
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.util.List;
-
-@Document(indexName = "interviews")
-@Data
-public class QuestionEntity {
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class PreguntaEntity {
 
     @Field(name = "question_text", type = FieldType.Text)
-    private String questionText;
+    private String descripcion;
 
     @Field(name = "question_title", type = FieldType.Text)
-    private String questionTitle;
+    private String titulo;
 
 }
 
