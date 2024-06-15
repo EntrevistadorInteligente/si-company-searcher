@@ -33,13 +33,12 @@ public class CrearInvestigarEmpresaService {
                 .collectList()
                 .flatMap(entrevistasFiltradas ->
                         this.informacionEmpresaDao.create(posicionEntrevista.getFormulario(), entrevistasFiltradas)
-                                .zipWith(Mono.just(posicionEntrevista), (daoResponse, posicion) ->
-                                        crearMensajeAnalizadorEmpresa(daoResponse, posicion))
+                                .zipWith(Mono.just(posicionEntrevista), this::crearMensajeAnalizadorEmpresa)
                 );
     }
 
     private Flux<InterviewDto> filtrarEntrevistasPorThreshold(List<InterviewDto> entrevistas) {
-        double highestScore = entrevistas.get(0).getPuntuacion();
+        double highestScore = entrevistas.stream().mapToDouble(InterviewDto::getPuntuacion).max().orElse(0);
         double threshold = highestScore * 0.5;
 
         return Flux.fromIterable(entrevistas)
