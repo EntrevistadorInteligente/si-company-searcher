@@ -2,6 +2,7 @@ package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
 import com.entrevistador.analizadorempresa.domain.exception.PriceIsLessThanOrEqualToZero;
 import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
+import com.entrevistador.analizadorempresa.domain.model.dto.InterviewDto;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.AnalizadorEmpresaRepository;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +36,8 @@ class InformacionEmpresaBdDaoTest {
         InformacionEmpresaDto informacionEmpresaDto = InformacionEmpresaDto.builder()
                 .empresa("any")
                 .build();
-        Mono<InformacionEmpresaDto> publisher = this.informacionEmpresaBdDao.create(informacionEmpresaDto);
+        List<InterviewDto> entrevistasDto = List.of(InterviewDto.builder().build());
+        Mono<InformacionEmpresaDto> publisher = this.informacionEmpresaBdDao.create(informacionEmpresaDto, entrevistasDto);
 
         StepVerifier
                 .create(publisher)
@@ -45,7 +49,9 @@ class InformacionEmpresaBdDaoTest {
 
     @Test
     void testCreatePriceIsLessThanOrEqualToZeroException() {
-        Mono<InformacionEmpresaDto> publisher = this.informacionEmpresaBdDao.create(InformacionEmpresaDto.builder().build());
+        List<InterviewDto> entrevistasDto = List.of(InterviewDto.builder().build());
+        Mono<InformacionEmpresaDto> publisher = this.informacionEmpresaBdDao.create(InformacionEmpresaDto.builder().build(),
+                entrevistasDto);
 
         StepVerifier
                 .create(publisher)
