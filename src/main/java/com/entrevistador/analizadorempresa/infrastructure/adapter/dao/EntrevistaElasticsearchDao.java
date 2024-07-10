@@ -1,126 +1,106 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
+import com.entrevistador.analizadorempresa.domain.exception.QueryFileException;
 import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
 import com.entrevistador.analizadorempresa.domain.model.dto.InterviewDto;
 import com.entrevistador.analizadorempresa.domain.model.dto.QuestionDto;
 import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.EntrevistaEntity;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.InterviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.StringQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import reactor.core.publisher.Flux;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class EntrevistaElasticsearchDao implements EntrevistaElasticsearch {
 
-    private final InterviewRepository entrevistaPrueba;
+    @Value("classpath:elasticsearchqueries/query-with-company.json")
+    private Resource queryWithCompanyResource;
+
+    @Value("classpath:elasticsearchqueries/query-without-company.json")
+    private Resource queryWithoutCompanyResource;
+
     private final ReactiveElasticsearchOperations operations;
-
-    private static StringQuery getStringQuery(InformacionEmpresaDto analizadorEmpresaDto, Pageable pageable) {
-        String queryString = """
-            {
-                "bool": {
-                    "must": [
-                        {
-                            "bool": {
-                                "should": [
-                                    {
-                                        "match": {
-                                            "company_name": {
-                                                "query": "%s",
-                                                "fuzziness": "AUTO",
-                                                "operator": "and"
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "wildcard": {
-                                            "company_name": {
-                                                "value": "*%s*",
-                                                "case_insensitive": true
-                                            }
-                                        }
-                                    }
-                                ],
-                                "minimum_should_match": 1
-                            }
-                        },
-                        {
-                            "bool": {
-                                "should": [
-                                    {
-                                        "multi_match": {
-                                            "query": "%s",
-                                            "fields": [
-                                                "title^3",
-                                                "interview_text^2"
-                                            ]
-                                        }
-                                    }
-                                ],
-                                "minimum_should_match": 1
-                            }
-                        }
-                    ]
-                }
-            }
-            """.formatted(analizadorEmpresaDto.getEmpresa(), analizadorEmpresaDto.getEmpresa().toLowerCase(),
-                analizadorEmpresaDto.getPerfil() + " " + analizadorEmpresaDto.getSeniority());
-
-        StringQuery stringQuery = new StringQuery(queryString, pageable);
-        return stringQuery;
-    }
-
-
-    @Override
-    public Flux<EntrevistaEntity> obtenerEntrevistas(InformacionEmpresaDto analizadorEmpresaDto) {
-        List<Map<String, String>> queries = List.of(
-                Map.of("query", analizadorEmpresaDto.getPerfil())
-        );
-        String multiMatchQueries = queries.stream()
-                .map(query -> String.format("""
-                {
-                    "multi_match": {
-                        "query": "%s",
-                        "fields": [
-                            "title^3",
-                            "interview_text^2"
-                        ]
-                    }
-                }
-                """, query.get("query")))
-                .collect(Collectors.joining(","));
-
-        return entrevistaPrueba.obtenerEntrevistas(analizadorEmpresaDto.getEmpresa(), multiMatchQueries);
-    }
 
     @Override
     public Flux<InterviewDto> obtenerEntrevistasPorRepo(InformacionEmpresaDto analizadorEmpresaDto) {
+
         Pageable pageable = PageRequest.of(0, 10);
+        Flux<InterviewDto> resultadosConEmpresa = buscarConEmpresa(analizadorEmpresaDto, pageable);
 
-        StringQuery stringQuery = getStringQuery(analizadorEmpresaDto, pageable);
+        return resultadosConEmpresa.switchIfEmpty(buscarSinEmpresa(analizadorEmpresaDto, pageable));
+    }
 
-        Flux<SearchHit<EntrevistaEntity>> searchHits = operations.search(stringQuery, EntrevistaEntity.class);
+    private Flux<InterviewDto> buscarConEmpresa(InformacionEmpresaDto analizadorEmpresaDto, Pageable pageable) {
 
-        return searchHits
+        String queryTemplate = loadQueryTemplate(queryWithCompanyResource);
+        String queryString = replacePlaceholders(queryTemplate, analizadorEmpresaDto, true);
+
+        StringQuery stringQuery = new StringQuery("""
+            %s
+            """.formatted(queryString), pageable);
+
+        return operations.search(stringQuery, EntrevistaEntity.class)
                 .map(this::mapToInterviewDto);
+    }
+
+    private Flux<InterviewDto> buscarSinEmpresa(InformacionEmpresaDto analizadorEmpresaDto, Pageable pageable) {
+        String queryTemplate = loadQueryTemplate(queryWithoutCompanyResource);
+        String queryString = replacePlaceholders(queryTemplate, analizadorEmpresaDto, false);
+
+        StringQuery stringQuery = new StringQuery("""
+            %s
+            """.formatted(queryString), pageable);
+
+        return operations.search(stringQuery, EntrevistaEntity.class)
+                .map(this::mapToInterviewDto);
+    }
+
+
+    private String loadQueryTemplate(Resource resource) {
+        try (InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+            return FileCopyUtils.copyToString(reader);
+        } catch (IOException e) {
+            throw new QueryFileException("Failed to load query template", e);
+        }
+    }
+
+    private String cleanValue(String value) {
+        return value.replaceAll("[\\r\\n]+", " ").trim();
+    }
+
+    private String replacePlaceholders(String queryTemplate, InformacionEmpresaDto dto, boolean withCompany) {
+        if (withCompany) {
+            return queryTemplate
+                    .replace("{COMPANY_NAME}", cleanValue(dto.getEmpresa()))
+                    .replace("{COMPANY_NAME_LOWERCASE}", cleanValue(dto.getEmpresa().toLowerCase()))
+                    .replace("{PROFILE_SENIORITY}", cleanValue(dto.getPerfil() + " " + dto.getSeniority()))
+                    .replace("{DESCRIPTION_VACANCY}", cleanValue(dto.getDescripcionVacante()));
+        } else {
+            return queryTemplate
+                    .replace("{PROFILE_SENIORITY}", cleanValue(dto.getPerfil() + " " + dto.getSeniority()))
+                    .replace("{DESCRIPTION_VACANCY}", cleanValue(dto.getDescripcionVacante()));
+        }
     }
 
     private InterviewDto mapToInterviewDto(SearchHit<EntrevistaEntity> hit) {
         EntrevistaEntity entity = hit.getContent();
         List<QuestionDto> preguntas = new ArrayList<>();
-        if(entity != null && entity.getPreguntas() != null){
+        if (entity != null && entity.getPreguntas() != null) {
             preguntas = entity.getPreguntas().stream()
                     .map(pregunta -> QuestionDto.builder()
                             .titulo(pregunta.getTitulo())
