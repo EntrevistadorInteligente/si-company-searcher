@@ -1,0 +1,36 @@
+{
+  "bool": {
+    "should": [
+      {
+        "match_phrase": {
+          "title": {
+            "query": "#{PROFILE_SENIORITY}",
+            "boost": 5
+          }
+        }
+      },
+      {
+        "match_phrase": {
+          "interview_text": {
+            "query": "#{DESCRIPTION_VACANCY}",
+            "boost": 2,
+            "slop": 50
+          }
+        }
+      },
+      {
+        "multi_match": {
+          "query": "#{PROFILE_SENIORITY}",
+          "fields": [
+            "title^4",
+            "interview_text"
+          ],
+          "type": "best_fields",
+          "tie_breaker": 0.3,
+          "boost": 1.5
+        }
+      }
+    ],
+    "minimum_should_match": 1
+  }
+}
