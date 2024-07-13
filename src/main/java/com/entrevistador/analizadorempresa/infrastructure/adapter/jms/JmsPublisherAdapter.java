@@ -1,7 +1,7 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.jms;
 
 import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.dto.MensajeAnalizadorEmpresaDto;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.MensajeAnalizadorEmpresaDto;
 import com.entrevistador.analizadorempresa.domain.port.kafka.KafkaPublisher;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
 import lombok.RequiredArgsConstructor;

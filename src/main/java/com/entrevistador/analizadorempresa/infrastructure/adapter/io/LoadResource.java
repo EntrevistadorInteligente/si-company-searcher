@@ -19,15 +19,15 @@ public class LoadResource {
     private Resource queryWithoutCompanyResource;
 
     public String loadQueryTemplateWithCompany() {
-        try (InputStreamReader reader = new InputStreamReader(queryWithCompanyResource.getInputStream(), StandardCharsets.UTF_8)) {
-            return FileCopyUtils.copyToString(reader);
-        } catch (IOException e) {
-            throw new QueryFileException("Failed to load query template", e);
-        }
+        return this.loadQueryTemplate(queryWithCompanyResource);
     }
 
     public String loadQueryTemplateWithoutCompany() {
-        try (InputStreamReader reader = new InputStreamReader(queryWithoutCompanyResource.getInputStream(), StandardCharsets.UTF_8)) {
+        return this.loadQueryTemplate(queryWithoutCompanyResource);
+    }
+
+    private String loadQueryTemplate(Resource resource) {
+        try (InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
             return FileCopyUtils.copyToString(reader);
         } catch (IOException e) {
             throw new QueryFileException("Failed to load query template", e);

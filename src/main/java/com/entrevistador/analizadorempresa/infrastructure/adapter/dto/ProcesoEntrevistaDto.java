@@ -1,4 +1,4 @@
-package com.entrevistador.analizadorempresa.domain.model.dto;
+package com.entrevistador.analizadorempresa.infrastructure.adapter.dto;
 
 import com.entrevistador.analizadorempresa.domain.model.enums.EstadoEntrevistaEnum;
 import lombok.AllArgsConstructor;

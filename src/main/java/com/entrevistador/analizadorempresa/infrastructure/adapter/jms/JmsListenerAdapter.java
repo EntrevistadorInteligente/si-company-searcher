@@ -1,7 +1,7 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.jms;
 
 import com.entrevistador.analizadorempresa.application.service.InvestigarEmpresaService;
-import com.entrevistador.analizadorempresa.domain.model.dto.PosicionEntrevistaDto;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.PosicionEntrevistaDto;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

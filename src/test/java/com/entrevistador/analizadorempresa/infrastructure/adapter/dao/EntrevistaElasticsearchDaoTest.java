@@ -46,8 +46,8 @@ class EntrevistaElasticsearchDaoTest {
 
         Interview interview = Interview.builder().build();
 
-        when(this.loadResource.loadQueryTemplateWithCompany()).thenReturn("withCompany");
-        when(this.loadResource.loadQueryTemplateWithoutCompany()).thenReturn("withoutCompany");
+        when(this.loadResource.loadQueryTemplateWithCompany()).thenReturn("{COMPANY_NAME} {PROFILE_SENIORITY} {DESCRIPTION_VACANCY}");
+        when(this.loadResource.loadQueryTemplateWithoutCompany()).thenReturn("{PROFILE_SENIORITY} {DESCRIPTION_VACANCY}");
         when(this.operations.search(any(), eq(EntrevistaEntity.class)))
                 .thenReturn(Flux.just(searchHit));
         when(this.mapper.mapOutInterview(any(), any()))
