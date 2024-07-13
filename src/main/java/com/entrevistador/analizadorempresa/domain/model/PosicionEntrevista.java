@@ -9,11 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InformacionEmpresa {
-    private String idInformacionEmpresaRag;
-    private String descripcionVacante;
-    private String empresa;
-    private String perfil;
-    private String seniority;
-    private String pais;
+public class PosicionEntrevista {
+    private String idEntrevista;
+    private String eventoEntrevistaId;
+    private InformacionEmpresa formulario;
 }

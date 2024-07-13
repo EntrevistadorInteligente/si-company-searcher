@@ -7,13 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class InformacionEmpresa {
+@NoArgsConstructor
+public class MensajeAnalizadorEmpresa {
+    private ProcesoEntrevista procesoEntrevista;
+    private String idEntrevista;
     private String idInformacionEmpresaRag;
-    private String descripcionVacante;
-    private String empresa;
-    private String perfil;
-    private String seniority;
-    private String pais;
 }

@@ -1,9 +1,10 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
-import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
-import com.entrevistador.analizadorempresa.domain.model.dto.InterviewDto;
-import com.entrevistador.analizadorempresa.domain.model.dto.QuestionDto;
+import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
+import com.entrevistador.analizadorempresa.domain.model.Interview;
+import com.entrevistador.analizadorempresa.domain.model.Question;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.AnalizadorEmpresaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,26 +28,32 @@ class InformacionEmpresaBdDaoTest {
     private InformacionEmpresaBdDao informacionEmpresaBdDao;
     @Mock
     private AnalizadorEmpresaRepository analizadorEmpresaRepository;
+    @Mock
+    private AnalizadorEmpresaMapper mapper;
 
     @Test
     void testCreate() {
         InformacionEmpresaEntity informacionEmpresaEntity = InformacionEmpresaEntity.builder().empresa("any").build();
 
-        InformacionEmpresaDto informacionEmpresaDto = InformacionEmpresaDto.builder()
+        InformacionEmpresa informacionEmpresa = InformacionEmpresa.builder()
                 .empresa("any")
                 .build();
-        QuestionDto questionDto = QuestionDto.builder().build();
-        List<InterviewDto> entrevistasDto = List.of(InterviewDto.builder().preguntas(List.of(questionDto)).build());
+        Question question = Question.builder().build();
+        List<Interview> interviews = List.of(Interview.builder().preguntas(List.of(question)).build());
 
+        when(this.mapper.mapInInformacionEmpresaEntity(any(), any())).thenReturn(informacionEmpresaEntity);
         when(this.analizadorEmpresaRepository.save(any())).thenReturn(Mono.just(informacionEmpresaEntity));
+        when(this.mapper.mapOutInformacionEmpresa(any())).thenReturn(informacionEmpresa);
 
-        Mono<InformacionEmpresaDto> publisher = this.informacionEmpresaBdDao.create(informacionEmpresaDto, entrevistasDto);
+        Mono<InformacionEmpresa> publisher = this.informacionEmpresaBdDao.create(informacionEmpresa, interviews);
 
         StepVerifier
                 .create(publisher)
-                .assertNext(informacion -> assertEquals(informacionEmpresaDto.getEmpresa(), informacion.getEmpresa()))
+                .assertNext(informacion -> assertEquals(informacionEmpresa.getEmpresa(), informacion.getEmpresa()))
                 .verifyComplete();
 
+        verify(this.mapper, times(1)).mapInInformacionEmpresaEntity(any(), any());
         verify(this.analizadorEmpresaRepository, times(1)).save(any());
+        verify(this.mapper, times(1)).mapOutInformacionEmpresa(any());
     }
 }

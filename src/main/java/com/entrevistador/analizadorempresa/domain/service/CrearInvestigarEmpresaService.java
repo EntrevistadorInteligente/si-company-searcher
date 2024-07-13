@@ -1,10 +1,10 @@
 package com.entrevistador.analizadorempresa.domain.service;
 
-import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
-import com.entrevistador.analizadorempresa.domain.model.dto.InterviewDto;
-import com.entrevistador.analizadorempresa.domain.model.dto.MensajeAnalizadorEmpresaDto;
-import com.entrevistador.analizadorempresa.domain.model.dto.PosicionEntrevistaDto;
-import com.entrevistador.analizadorempresa.domain.model.dto.ProcesoEntrevistaDto;
+import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
+import com.entrevistador.analizadorempresa.domain.model.Interview;
+import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
+import com.entrevistador.analizadorempresa.domain.model.PosicionEntrevista;
+import com.entrevistador.analizadorempresa.domain.model.ProcesoEntrevista;
 import com.entrevistador.analizadorempresa.domain.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
 import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDao;
@@ -21,15 +21,10 @@ public class CrearInvestigarEmpresaService {
     private final InformacionEmpresaDao informacionEmpresaDao;
     private final EntrevistaElasticsearch entrevistaElasticsearch;
 
-    public Mono<MensajeAnalizadorEmpresaDto> create(PosicionEntrevistaDto posicionEntrevista) {
+    public Mono<MensajeAnalizadorEmpresa> create(PosicionEntrevista posicionEntrevista) {
         return this.entrevistaElasticsearch.obtenerEntrevistasPorRepo(posicionEntrevista.getFormulario())
                 .collectList()
-                .flatMapMany(entrevistas -> {
-                    if (entrevistas.isEmpty()) {
-                        return Flux.empty();
-                    }
-                    return filtrarEntrevistasPorThreshold(entrevistas);
-                })
+                .flatMapMany(this::filtrarEntrevistasPorThreshold)
                 .collectList()
                 .flatMap(entrevistasFiltradas ->
                         this.informacionEmpresaDao.create(posicionEntrevista.getFormulario(), entrevistasFiltradas)
@@ -37,27 +32,34 @@ public class CrearInvestigarEmpresaService {
                 );
     }
 
-    private Flux<InterviewDto> filtrarEntrevistasPorThreshold(List<InterviewDto> entrevistas) {
-        double highestScore = entrevistas.stream().mapToDouble(InterviewDto::getPuntuacion).max().orElse(0);
+    private Flux<Interview> filtrarEntrevistasPorThreshold(List<Interview> entrevistas) {
+        if (entrevistas.isEmpty()) {
+            return Flux.empty();
+        }
+
+        double highestScore = entrevistas.stream()
+                .mapToDouble(Interview::getPuntuacion)
+                .max()
+                .orElse(0);
         double threshold = highestScore * 0.5;
 
         return Flux.fromIterable(entrevistas)
                 .filter(entrevista -> entrevista.getPuntuacion() >= threshold);
     }
 
-    private MensajeAnalizadorEmpresaDto crearMensajeAnalizadorEmpresa(InformacionEmpresaDto infoEmpresaDto,
-                                                                      PosicionEntrevistaDto posicionEntrevistaDto) {
-        ProcesoEntrevistaDto procesoEntrevista = this.crearProcesoEntrevistaDto(posicionEntrevistaDto);
-        return MensajeAnalizadorEmpresaDto.builder()
+    private MensajeAnalizadorEmpresa crearMensajeAnalizadorEmpresa(InformacionEmpresa informacionEmpresa,
+                                                                   PosicionEntrevista posicionEntrevista) {
+        ProcesoEntrevista procesoEntrevista = this.crearProcesoEntrevista(posicionEntrevista);
+        return MensajeAnalizadorEmpresa.builder()
                 .procesoEntrevista(procesoEntrevista)
-                .idEntrevista(posicionEntrevistaDto.getIdEntrevista())
-                .idInformacionEmpresaRag(infoEmpresaDto.getIdInformacionEmpresaRag())
+                .idEntrevista(posicionEntrevista.getIdEntrevista())
+                .idInformacionEmpresaRag(informacionEmpresa.getIdInformacionEmpresaRag())
                 .build();
     }
 
-    private ProcesoEntrevistaDto crearProcesoEntrevistaDto(PosicionEntrevistaDto posicionEntrevistaDto) {
-        return ProcesoEntrevistaDto.builder()
-                .uuid(posicionEntrevistaDto.getEventoEntrevistaId())
+    private ProcesoEntrevista crearProcesoEntrevista(PosicionEntrevista posicionEntrevista) {
+        return ProcesoEntrevista.builder()
+                .uuid(posicionEntrevista.getEventoEntrevistaId())
                 .estado(EstadoEntrevistaEnum.FN)
                 .fuente(ANALIZADOR_EMPRESA)
                 .build();

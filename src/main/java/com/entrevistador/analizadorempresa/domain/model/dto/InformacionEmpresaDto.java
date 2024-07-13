@@ -7,9 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class InformacionEmpresaDto {
     @JsonProperty("id_informacion_empresa_rag")
     private String idInformacionEmpresaRag;
