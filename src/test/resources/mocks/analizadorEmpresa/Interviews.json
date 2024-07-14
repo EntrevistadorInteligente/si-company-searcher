@@ -1,0 +1,15 @@
+[
+  {
+    "nombreEmpresa": "Empresa 1",
+    "tituloOferta": "Oferta 1",
+    "detalleAdicional": "Detalle 1",
+    "puntuacion": 5,
+    "preguntas": [
+      {
+        "titulo": "Pregunta 1",
+        "descripcion": "Descripcion 1"
+      }
+    ],
+    "detallesExperiencia": ["Detalle 1", "Detalle 2"]
+  }
+]

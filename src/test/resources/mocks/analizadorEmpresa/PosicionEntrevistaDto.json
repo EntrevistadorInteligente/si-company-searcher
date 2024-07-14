@@ -1,0 +1,12 @@
+{
+  "id_entrevista": "idEntrevista",
+  "evento_entrevista_id": "eventoEntrevistaId",
+  "formulario": {
+    "id_informacion_empresa_rag": "idInformacionEmpresaRag",
+    "descripcion_vacante": "descripcionVacante",
+    "empresa": "empresa",
+    "perfil": "perfil",
+    "seniority": "seniority",
+    "pais": "pais"
+  }
+}
