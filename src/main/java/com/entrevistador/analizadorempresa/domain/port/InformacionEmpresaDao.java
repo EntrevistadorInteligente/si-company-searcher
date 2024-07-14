@@ -7,6 +7,6 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 public interface InformacionEmpresaDao {
-    Mono<InformacionEmpresa> create(InformacionEmpresa analizadorEmpresaDto,
-                                    List<Interview> entrevistasDto);
+    Mono<InformacionEmpresa> create(InformacionEmpresa informacionEmpresa,
+                                    List<Interview> interviews);
 }

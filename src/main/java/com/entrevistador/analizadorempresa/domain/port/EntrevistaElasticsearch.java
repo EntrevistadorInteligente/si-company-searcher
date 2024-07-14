@@ -5,5 +5,5 @@ import com.entrevistador.analizadorempresa.domain.model.Interview;
 import reactor.core.publisher.Flux;
 
 public interface EntrevistaElasticsearch {
-    Flux<Interview> obtenerEntrevistasPorRepo(InformacionEmpresa analizadorEmpresaDto);
+    Flux<Interview> obtenerEntrevistasPorRepo(InformacionEmpresa informacionEmpresa);
 }
