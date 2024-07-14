@@ -46,6 +46,9 @@ public interface AnalizadorEmpresaMapper {
 
     @Named("mapOutQuestions")
     default List<Question> mapOutQuestions(List<PreguntaEntity> preguntaEntities) {
+        if  (preguntaEntities == null) {
+            return List.of();
+        }
         return preguntaEntities.stream()
                 .filter(Objects::nonNull)
                 .map(this::mapOutQuestion)

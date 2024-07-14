@@ -1,6 +1,5 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InterviewDto {
-    @JsonProperty("nombreEmpresa")
     private String nombreEmpresa;
-    @JsonProperty("tituloOferta")
     private String tituloOferta;
-    @JsonProperty("detalleAdicional")
     private String detalleAdicional;
-    @JsonProperty("puntuacion")
     private Double puntuacion;
-    @JsonProperty("preguntas")
     private List<QuestionDto> preguntas;
-    @JsonProperty("detallesExperiencia")
     private List<String> detallesExperiencia;
 }
 
