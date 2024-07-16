@@ -1,4 +1,4 @@
-package com.entrevistador.analizadorempresa.domain.model.dto;
+package com.entrevistador.analizadorempresa.infrastructure.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -7,9 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class InformacionEmpresaDto {
     @JsonProperty("id_informacion_empresa_rag")
     private String idInformacionEmpresaRag;

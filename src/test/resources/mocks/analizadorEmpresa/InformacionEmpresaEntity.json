@@ -1,0 +1,24 @@
+{
+  "uuid": "uuid",
+  "empresa": "empresa",
+  "perfil": "perfil",
+  "seniority": "seniority",
+  "pais": "pais",
+  "descripcionVacante": "descripcionVacante",
+  "informacionEmpresaVect": [
+    {
+      "id": "uuid",
+      "nombreEmpresa": "Apple",
+      "titulo": "Software Engineer",
+      "detalleAdicional": "Please apply through our website",
+      "descripcionEntrevista": "We will contact you soon",
+      "preguntas": [
+        {
+          "descripcion": "What is your experience with Java?",
+          "titulo": "Java experience"
+        }
+      ],
+      "detallesExperiencia": ["Java", "Spring", "Hibernate", "SQL"]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "procesoEntrevista": {
+    "uuid": "1234567890",
+    "estado": "AC",
+    "fuente": "ENTREVISTA",
+    "error": "No hay error"
+  },
+  "idEntrevista": "1234567890",
+  "idInformacionEmpresaRag": "1234567890"
+}

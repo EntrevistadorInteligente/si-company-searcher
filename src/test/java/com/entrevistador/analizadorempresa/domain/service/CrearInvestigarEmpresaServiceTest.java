@@ -1,8 +1,8 @@
 package com.entrevistador.analizadorempresa.domain.service;
 
-import com.entrevistador.analizadorempresa.domain.model.dto.InformacionEmpresaDto;
-import com.entrevistador.analizadorempresa.domain.model.dto.MensajeAnalizadorEmpresaDto;
-import com.entrevistador.analizadorempresa.domain.model.dto.PosicionEntrevistaDto;
+import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
+import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
+import com.entrevistador.analizadorempresa.domain.model.PosicionEntrevista;
 import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
 import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDao;
 import org.junit.jupiter.api.Test;
@@ -14,13 +14,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class CrearInvestigarEmpresaServiceTest {
@@ -33,7 +32,7 @@ class CrearInvestigarEmpresaServiceTest {
 
     @Test
     void testCreate() {
-        InformacionEmpresaDto informacionEmpresaDto = InformacionEmpresaDto.builder()
+        InformacionEmpresa informacionEmpresaDto = InformacionEmpresa.builder()
                 .empresa("empresa")
                 .idInformacionEmpresaRag("idInformacionEmpresaRag")
                 .descripcionVacante("descripcionVacante")
@@ -42,7 +41,7 @@ class CrearInvestigarEmpresaServiceTest {
                 .seniority("seniority")
                 .build();
 
-        PosicionEntrevistaDto posicionEntrevistaDto = PosicionEntrevistaDto.builder()
+        PosicionEntrevista posicionEntrevistaDto = PosicionEntrevista.builder()
                 .formulario(informacionEmpresaDto)
                 .idEntrevista("idEntrevista")
                 .eventoEntrevistaId("eventoEntrevistaId")
@@ -51,7 +50,7 @@ class CrearInvestigarEmpresaServiceTest {
         when(this.informacionEmpresaDao.create(any(), anyList())).thenReturn(Mono.just(informacionEmpresaDto));
         when(this.entrevistaElasticsearch.obtenerEntrevistasPorRepo(any())).thenReturn(Flux.empty());
 
-        Mono<MensajeAnalizadorEmpresaDto> publisher = this.crearInvestigarEmpresaService.create(posicionEntrevistaDto);
+        Mono<MensajeAnalizadorEmpresa> publisher = this.crearInvestigarEmpresaService.create(posicionEntrevistaDto);
 
         StepVerifier
                 .create(publisher)
