@@ -14,6 +14,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.message.BasicHeader;
 import org.elasticsearch.client.RestClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,11 +22,15 @@ import java.util.List;
 
 @Configuration
 public class ElasticConfiguration {
+
+    @Value("${elasticsearch.url}")
+    private String elasticsearchUrl;
+
     @Bean
     public RestClient getRestClient() {
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("", ""));
-        return RestClient.builder(new HttpHost("elasticsearch.pruebas-entrevistador-inteligente.site", 443, "https"))
+        return RestClient.builder(new HttpHost(elasticsearchUrl, 443, "https"))
                 .setHttpClientConfigCallback(httpClientBuilder -> {
                     httpClientBuilder.disableAuthCaching();
                     httpClientBuilder.setDefaultHeaders(List.of(
