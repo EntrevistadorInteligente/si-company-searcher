@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-java@main
         with:
           java-version: '17'
-          distribution: 'termurin'
+          distribution: 'temurin'
           cache: maven
 
       - uses: actions/cache@main
