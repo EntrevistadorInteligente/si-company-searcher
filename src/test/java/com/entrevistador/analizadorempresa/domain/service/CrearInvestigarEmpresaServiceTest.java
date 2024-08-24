@@ -1,6 +1,7 @@
 package com.entrevistador.analizadorempresa.domain.service;
 
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
+import com.entrevistador.analizadorempresa.domain.model.Interview;
 import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
 import com.entrevistador.analizadorempresa.domain.model.PosicionEntrevista;
 import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
@@ -13,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,8 +50,18 @@ class CrearInvestigarEmpresaServiceTest {
                 .eventoEntrevistaId("eventoEntrevistaId")
                 .build();
 
+        Interview entrevista1 = Interview.builder()
+                .puntuacion(80.0)
+                .build();
+
+        Interview entrevista2 = Interview.builder()
+                .puntuacion(50.0)
+                .build();
+
+        List<Interview> entrevistas = List.of(entrevista1, entrevista2);
+
         when(this.informacionEmpresaDao.create(any(), anyList())).thenReturn(Mono.just(informacionEmpresaDto));
-        when(this.entrevistaElasticsearch.obtenerEntrevistasPorRepo(any())).thenReturn(Flux.empty());
+        when(this.entrevistaElasticsearch.obtenerEntrevistasPorRepo(any())).thenReturn(Flux.fromIterable(entrevistas));
 
         Mono<MensajeAnalizadorEmpresa> publisher = this.crearInvestigarEmpresaService.create(posicionEntrevistaDto);
 
