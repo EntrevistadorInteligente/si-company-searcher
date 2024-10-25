@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/*
+ * Clase que representa el dominio de InformacionEmpresaEntity
+ */
 @Getter
 @Builder
 @NoArgsConstructor

@@ -1,10 +1,10 @@
 package com.entrevistador.analizadorempresa.utils;
 
+import com.entrevistador.analizadorempresa.domain.model.Entrevista;
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Question;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.PosicionEntrevistaDto;
+import com.entrevistador.analizadorempresa.domain.valueobject.MensajeAnalizadorEmpresa;
+import com.entrevistador.analizadorempresa.domain.model.Pregunta;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.in.KafkaPosicionEntrevistaInput;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -26,9 +26,9 @@ public class AnalizadorEmpresaMock {
         return INSTANCE;
     }
 
-    public PosicionEntrevistaDto getPosicionEntrevistaDto() throws IOException {
+    public KafkaPosicionEntrevistaInput getPosicionEntrevistaDto() throws IOException {
         return this.mapper.readValue(Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("mocks/analizadorEmpresa/PosicionEntrevistaDto.json"), PosicionEntrevistaDto.class);
+                .getResourceAsStream("mocks/analizadorEmpresa/KafkaPosicionEntrevistaInput.json"), KafkaPosicionEntrevistaInput.class);
     }
 
     public InformacionEmpresa getInformacionEmpresa() throws IOException {
@@ -36,15 +36,15 @@ public class AnalizadorEmpresaMock {
                 .getResourceAsStream("mocks/analizadorEmpresa/InformacionEmpresa.json"), InformacionEmpresa.class);
     }
 
-    public List<Interview> getInterviews() throws IOException {
+    public List<Entrevista> getInterviews() throws IOException {
         return this.mapper.readValue(Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("mocks/analizadorEmpresa/Interviews.json"), new TypeReference<List<Interview>>() {
+                .getResourceAsStream("mocks/analizadorEmpresa/Entrevista.json"), new TypeReference<List<Entrevista>>() {
         });
     }
 
-    public Question getQuestion() throws IOException {
+    public Pregunta getQuestion() throws IOException {
         return this.mapper.readValue(Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("mocks/analizadorEmpresa/Question.json"), Question.class);
+                .getResourceAsStream("mocks/analizadorEmpresa/Pregunta.json"), Pregunta.class);
     }
 
     public MensajeAnalizadorEmpresa getMensajeAnalizadorEmpresa() throws IOException {

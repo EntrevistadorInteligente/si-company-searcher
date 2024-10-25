@@ -1,7 +1,7 @@
 package com.entrevistador.analizadorempresa.application.service;
 
-import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.PosicionEntrevista;
+import com.entrevistador.analizadorempresa.domain.valueobject.MensajeAnalizadorEmpresa;
+import com.entrevistador.analizadorempresa.domain.valueobject.PosicionEntrevista;
 import com.entrevistador.analizadorempresa.domain.service.CrearInvestigarEmpresaService;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.jms.JmsPublisherAdapter;
 import org.junit.jupiter.api.Test;

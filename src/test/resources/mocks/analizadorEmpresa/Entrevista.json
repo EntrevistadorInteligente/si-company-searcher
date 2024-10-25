@@ -1,7 +1,7 @@
 [
   {
     "nombreEmpresa": "Empresa 1",
-    "tituloOferta": "Oferta 1",
+    "titulo": "Oferta 1",
     "detalleAdicional": "Detalle 1",
     "puntuacion": 5,
     "preguntas": [

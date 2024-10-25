@@ -1,8 +1,8 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.jms;
 
 import com.entrevistador.analizadorempresa.application.service.InvestigarEmpresaService;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.PosicionEntrevistaDto;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.in.KafkaPosicionEntrevistaInput;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.in.KafkaListenerMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -16,12 +16,12 @@ import java.io.IOException;
 public class JmsListenerAdapter {
     private final InvestigarEmpresaService investigarEmpresaService;
     private final ObjectMapper objectMapper;
-    private final AnalizadorEmpresaMapper mapper;
+    private final KafkaListenerMapper mapper;
 
     @KafkaListener(topics = "empresaPublisherTopic", groupId = "my-group")
     public void empresaPublisherTopic(String jsonData) {
         try {
-            PosicionEntrevistaDto posicionEntrevista = this.objectMapper.readValue(jsonData, PosicionEntrevistaDto.class);
+            KafkaPosicionEntrevistaInput posicionEntrevista = this.objectMapper.readValue(jsonData, KafkaPosicionEntrevistaInput.class);
             Mono.just(this.mapper.mapInPosicionEntrevista(posicionEntrevista))
                     .flatMap(this.investigarEmpresaService::ejecutar)
                     .doOnSubscribe(subscription -> System.out.println("Starting processing: " + posicionEntrevista))

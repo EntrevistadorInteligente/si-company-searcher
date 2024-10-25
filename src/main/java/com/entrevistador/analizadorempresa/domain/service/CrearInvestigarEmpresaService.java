@@ -1,10 +1,10 @@
 package com.entrevistador.analizadorempresa.domain.service;
 
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.PosicionEntrevista;
-import com.entrevistador.analizadorempresa.domain.model.ProcesoEntrevista;
+import com.entrevistador.analizadorempresa.domain.model.Entrevista;
+import com.entrevistador.analizadorempresa.domain.valueobject.MensajeAnalizadorEmpresa;
+import com.entrevistador.analizadorempresa.domain.valueobject.PosicionEntrevista;
+import com.entrevistador.analizadorempresa.domain.valueobject.ProcesoEntrevista;
 import com.entrevistador.analizadorempresa.domain.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
 import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDao;
@@ -32,13 +32,13 @@ public class CrearInvestigarEmpresaService {
                 );
     }
 
-    private Flux<Interview> filtrarEntrevistasPorThreshold(List<Interview> entrevistas) {
+    private Flux<Entrevista> filtrarEntrevistasPorThreshold(List<Entrevista> entrevistas) {
         if (entrevistas.isEmpty()) {
             return Flux.empty();
         }
 
         double highestScore = entrevistas.stream()
-                .mapToDouble(Interview::getPuntuacion)
+                .mapToDouble(Entrevista::getPuntuacion)
                 .max()
                 .orElse(0);
         double threshold = highestScore * 0.5;

@@ -1,9 +1,9 @@
 package com.entrevistador.analizadorempresa.domain.service;
 
+import com.entrevistador.analizadorempresa.domain.model.Entrevista;
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.PosicionEntrevista;
+import com.entrevistador.analizadorempresa.domain.valueobject.MensajeAnalizadorEmpresa;
+import com.entrevistador.analizadorempresa.domain.valueobject.PosicionEntrevista;
 import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
 import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDao;
 import org.junit.jupiter.api.Test;
@@ -50,15 +50,15 @@ class CrearInvestigarEmpresaServiceTest {
                 .eventoEntrevistaId("eventoEntrevistaId")
                 .build();
 
-        Interview entrevista1 = Interview.builder()
+        Entrevista entrevista1 = Entrevista.builder()
                 .puntuacion(80.0)
                 .build();
 
-        Interview entrevista2 = Interview.builder()
+        Entrevista entrevista2 = Entrevista.builder()
                 .puntuacion(50.0)
                 .build();
 
-        List<Interview> entrevistas = List.of(entrevista1, entrevista2);
+        List<Entrevista> entrevistas = List.of(entrevista1, entrevista2);
 
         when(this.informacionEmpresaDao.create(any(), anyList())).thenReturn(Mono.just(informacionEmpresaDto));
         when(this.entrevistaElasticsearch.obtenerEntrevistasPorRepo(any())).thenReturn(Flux.fromIterable(entrevistas));

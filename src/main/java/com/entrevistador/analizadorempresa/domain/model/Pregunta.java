@@ -5,12 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/*
+ * Clase que representa el dominio de PreguntaEntity
+ */
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PosicionEntrevista {
-    private String idEntrevista;
-    private String eventoEntrevistaId;
-    private InformacionEmpresa formulario;
+public class Pregunta {
+    private String titulo;
+    private String descripcion;
 }
+
