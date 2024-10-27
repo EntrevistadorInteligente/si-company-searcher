@@ -1,11 +1,11 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
+import com.entrevistador.analizadorempresa.domain.model.Entrevista;
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
 import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.io.LoadResource;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.out.EntrevistaElasticsearchDaoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,19 +19,19 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class EntrevistaElasticsearchDao implements EntrevistaElasticsearch {
     private final ReactiveElasticsearchOperations operations;
-    private final AnalizadorEmpresaMapper mapper;
+    private final EntrevistaElasticsearchDaoMapper mapper;
     private final LoadResource loadResource;
 
     @Override
-    public Flux<Interview> obtenerEntrevistasPorRepo(InformacionEmpresa informacionEmpresa) {
+    public Flux<Entrevista> obtenerEntrevistasPorRepo(InformacionEmpresa informacionEmpresa) {
 
         Pageable pageable = PageRequest.of(0, 10);
-        Flux<Interview> resultadosConEmpresa = buscarConEmpresa(informacionEmpresa, pageable);
+        Flux<Entrevista> resultadosConEmpresa = buscarConEmpresa(informacionEmpresa, pageable);
 
         return resultadosConEmpresa.switchIfEmpty(buscarSinEmpresa(informacionEmpresa, pageable));
     }
 
-    private Flux<Interview> buscarConEmpresa(InformacionEmpresa informacionEmpresa, Pageable pageable) {
+    private Flux<Entrevista> buscarConEmpresa(InformacionEmpresa informacionEmpresa, Pageable pageable) {
 
         String queryTemplate = this.loadResource.loadQueryTemplateWithCompany();
         String queryString = replacePlaceholders(queryTemplate, informacionEmpresa, true);
@@ -41,10 +41,10 @@ public class EntrevistaElasticsearchDao implements EntrevistaElasticsearch {
                 """.formatted(queryString), pageable);
 
         return operations.search(stringQuery, EntrevistaEntity.class)
-                .map(this::mapToInterview);
+                .map(this::mapToEntrevista);
     }
 
-    private Flux<Interview> buscarSinEmpresa(InformacionEmpresa informacionEmpresa, Pageable pageable) {
+    private Flux<Entrevista> buscarSinEmpresa(InformacionEmpresa informacionEmpresa, Pageable pageable) {
         String queryTemplate = this.loadResource.loadQueryTemplateWithoutCompany();
         String queryString = replacePlaceholders(queryTemplate, informacionEmpresa, false);
 
@@ -53,7 +53,7 @@ public class EntrevistaElasticsearchDao implements EntrevistaElasticsearch {
                 """.formatted(queryString), pageable);
 
         return operations.search(stringQuery, EntrevistaEntity.class)
-                .map(this::mapToInterview);
+                .map(this::mapToEntrevista);
     }
 
     private String cleanValue(String value) {
@@ -74,7 +74,7 @@ public class EntrevistaElasticsearchDao implements EntrevistaElasticsearch {
         }
     }
 
-    private Interview mapToInterview(SearchHit<EntrevistaEntity> entrevistaEntitySearchHit) {
+    private Entrevista mapToEntrevista(SearchHit<EntrevistaEntity> entrevistaEntitySearchHit) {
         EntrevistaEntity entity = entrevistaEntitySearchHit.getContent();
         return this.mapper.mapOutInterview(entity, entrevistaEntitySearchHit);
     }

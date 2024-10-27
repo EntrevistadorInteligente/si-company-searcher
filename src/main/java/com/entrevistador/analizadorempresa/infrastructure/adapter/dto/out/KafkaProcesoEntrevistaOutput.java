@@ -1,4 +1,4 @@
-package com.entrevistador.analizadorempresa.infrastructure.adapter.dto;
+package com.entrevistador.analizadorempresa.infrastructure.adapter.dto.out;
 
 import com.entrevistador.analizadorempresa.domain.model.enums.EstadoEntrevistaEnum;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProcesoEntrevistaDto {
+public class KafkaProcesoEntrevistaOutput {
     private String uuid;
     private EstadoEntrevistaEnum estado;
     private String fuente;

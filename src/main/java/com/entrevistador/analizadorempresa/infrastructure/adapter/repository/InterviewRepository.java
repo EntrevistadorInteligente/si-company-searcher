@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRe
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
+// TODO: Clase sin uso, se puede eliminar
 @Repository
 public interface InterviewRepository extends ReactiveElasticsearchRepository<EntrevistaEntity, String> {
 

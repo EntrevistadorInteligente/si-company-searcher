@@ -1,10 +1,10 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
+import com.entrevistador.analizadorempresa.domain.model.Entrevista;
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.model.Question;
+import com.entrevistador.analizadorempresa.domain.model.Pregunta;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.out.InformacionEmpresaBdDaoMapper;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.AnalizadorEmpresaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ class InformacionEmpresaBdDaoTest {
     @Mock
     private AnalizadorEmpresaRepository analizadorEmpresaRepository;
     @Mock
-    private AnalizadorEmpresaMapper mapper;
+    private InformacionEmpresaBdDaoMapper mapper;
 
     @Test
     void testCreate() {
@@ -38,14 +38,14 @@ class InformacionEmpresaBdDaoTest {
         InformacionEmpresa informacionEmpresa = InformacionEmpresa.builder()
                 .empresa("any")
                 .build();
-        Question question = Question.builder().build();
-        List<Interview> interviews = List.of(Interview.builder().preguntas(List.of(question)).build());
+        Pregunta pregunta = Pregunta.builder().build();
+        List<Entrevista> entrevistas = List.of(Entrevista.builder().preguntas(List.of(pregunta)).build());
 
         when(this.mapper.mapInInformacionEmpresaEntity(any(), any())).thenReturn(informacionEmpresaEntity);
         when(this.analizadorEmpresaRepository.save(any())).thenReturn(Mono.just(informacionEmpresaEntity));
         when(this.mapper.mapOutInformacionEmpresa(any())).thenReturn(informacionEmpresa);
 
-        Mono<InformacionEmpresa> publisher = this.informacionEmpresaBdDao.create(informacionEmpresa, interviews);
+        Mono<InformacionEmpresa> publisher = this.informacionEmpresaBdDao.create(informacionEmpresa, entrevistas);
 
         StepVerifier
                 .create(publisher)

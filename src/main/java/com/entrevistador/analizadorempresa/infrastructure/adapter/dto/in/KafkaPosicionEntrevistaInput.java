@@ -1,4 +1,4 @@
-package com.entrevistador.analizadorempresa.infrastructure.adapter.dto;
+package com.entrevistador.analizadorempresa.infrastructure.adapter.dto.in;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PosicionEntrevistaDto {
+public class KafkaPosicionEntrevistaInput {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
     @JsonProperty("evento_entrevista_id")
     private String eventoEntrevistaId;
     @JsonProperty("formulario")
-    private InformacionEmpresaDto formulario;
+    private KafkaInformacionEmpresaInput formulario;
 }

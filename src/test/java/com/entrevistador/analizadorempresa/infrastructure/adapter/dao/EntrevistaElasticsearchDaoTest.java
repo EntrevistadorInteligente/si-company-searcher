@@ -1,10 +1,10 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
 import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
+import com.entrevistador.analizadorempresa.domain.model.Entrevista;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.io.LoadResource;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
+import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.out.EntrevistaElasticsearchDaoMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +29,7 @@ class EntrevistaElasticsearchDaoTest {
     @Mock
     private ReactiveElasticsearchOperations operations;
     @Mock
-    private AnalizadorEmpresaMapper mapper;
+    private EntrevistaElasticsearchDaoMapper mapper;
     @Mock
     private LoadResource loadResource;
 
@@ -44,20 +44,20 @@ class EntrevistaElasticsearchDaoTest {
 
         SearchHit<EntrevistaEntity> searchHit = mock(SearchHit.class);
 
-        Interview interview = Interview.builder().build();
+        Entrevista entrevista = Entrevista.builder().build();
 
         when(this.loadResource.loadQueryTemplateWithCompany()).thenReturn("{COMPANY_NAME} {PROFILE_SENIORITY} {DESCRIPTION_VACANCY}");
         when(this.loadResource.loadQueryTemplateWithoutCompany()).thenReturn("{PROFILE_SENIORITY} {DESCRIPTION_VACANCY}");
         when(this.operations.search(any(), eq(EntrevistaEntity.class)))
                 .thenReturn(Flux.just(searchHit));
         when(this.mapper.mapOutInterview(any(), any()))
-                .thenReturn(interview);
+                .thenReturn(entrevista);
 
-        Flux<Interview> publisher = this.entrevistaElasticsearchDao.obtenerEntrevistasPorRepo(informacionEmpresa);
+        Flux<Entrevista> publisher = this.entrevistaElasticsearchDao.obtenerEntrevistasPorRepo(informacionEmpresa);
 
         StepVerifier
                 .create(publisher)
-                .expectNext(interview)
+                .expectNext(entrevista)
                 .verifyComplete();
 
         verify(this.loadResource, times(1)).loadQueryTemplateWithCompany();

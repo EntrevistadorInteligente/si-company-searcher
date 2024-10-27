@@ -1,4 +1,4 @@
-package com.entrevistador.analizadorempresa.infrastructure.adapter.dto;
+package com.entrevistador.analizadorempresa.infrastructure.adapter.dto.in;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InformacionEmpresaDto {
+public class KafkaInformacionEmpresaInput {
     @JsonProperty("id_informacion_empresa_rag")
     private String idInformacionEmpresaRag;
     @JsonProperty("descripcion_vacante")
