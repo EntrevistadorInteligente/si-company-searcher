@@ -28,16 +28,6 @@ public class KafkaConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String server;
 
-    @Value("${spring.kafka.sasl.mechanism}")
-    private String mechanism;
-
-    @Value("${spring.kafka.security.protocol}")
-    private String protocol;
-
-
-    @Value("${spring.kafka.sasl.jaas.config}")
-    private String jaasConfig;
-
     @Value("${spring.kafka.consumer.group-id}")
     private String consumerGroupId;
 
@@ -47,9 +37,6 @@ public class KafkaConfiguration {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
-        props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, protocol);
-        props.put(SaslConfigs.SASL_MECHANISM, mechanism);
-        props.put(SaslConfigs.SASL_JAAS_CONFIG, jaasConfig);
         return props;
     }
 
@@ -70,9 +57,8 @@ public class KafkaConfiguration {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, protocol);
-        props.put(SaslConfigs.SASL_MECHANISM, mechanism);
-        props.put(SaslConfigs.SASL_JAAS_CONFIG, jaasConfig);
+        // Agregar esta configuración
+        props.put("allow.auto.create.topics", true);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
