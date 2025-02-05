@@ -30,7 +30,7 @@ public class ElasticConfiguration {
     public RestClient getRestClient() {
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(elasticsearchUser, elasticsearchPass));
-        return RestClient.builder(new HttpHost(elasticsearchUrl, 443, "https"))
+        return RestClient.builder(new HttpHost(elasticsearchUrl, 9200, "http"))
                 .setHttpClientConfigCallback(httpClientBuilder -> {
                     httpClientBuilder.disableAuthCaching();
                     httpClientBuilder.addInterceptorLast((HttpResponseInterceptor)
