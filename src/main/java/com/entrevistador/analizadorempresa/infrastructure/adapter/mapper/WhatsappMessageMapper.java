@@ -65,12 +65,25 @@ public class WhatsappMessageMapper {
                 .build();
     }
     
-    public String toJsonString(Object obj) {
-        try {
-            return objectMapper.writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            log.error("Error al convertir objeto a JSON: {}", e.getMessage());
-            return "{}";
-        }
+    /**
+     * Convierte un mensaje a una cadena JSON
+     * 
+     * @param message Mensaje a convertir
+     * @return Cadena JSON que representa el mensaje
+     * @throws JsonProcessingException si ocurre un error en la serialización
+     */
+    public String toJsonString(WhatsappMessage message) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(message);
+    }
+    
+    /**
+     * Convierte una cadena JSON a un mensaje
+     * 
+     * @param json Cadena JSON a convertir
+     * @return Mensaje
+     * @throws JsonProcessingException si ocurre un error en la deserialización
+     */
+    public WhatsappMessage fromJson(String json) throws JsonProcessingException {
+        return objectMapper.readValue(json, WhatsappMessage.class);
     }
 } 

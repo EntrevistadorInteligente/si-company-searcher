@@ -20,7 +20,13 @@ kafka:
   topic:
     whatsapp:
       incoming: whatsapp.incoming
+      batched: whatsapp.batched
   topic-empresa-listener: empresa.listener
+
+# Configuración del agregador
+aggregator:
+  window:
+    seconds: ${AGGREGATOR_WINDOW_SECONDS:30}
 
 server:
   port: ${PORT:8080}
