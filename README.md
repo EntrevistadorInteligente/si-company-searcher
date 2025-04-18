@@ -12,7 +12,6 @@ La aplicación sigue una arquitectura hexagonal (ports & adapters) con tres capa
 * **Puertos**: Interfaces que definen cómo la capa de dominio interactúa con servicios externos
   * `WhatsappMessageRepository`: Puerto para persistencia de mensajes
   * `WhatsappPublisher`: Puerto para publicación de mensajes a Kafka
-  * `ProcesarWhatsappMessagePort`: Puerto para procesamiento de mensajes
 * **Servicios de Dominio**: Implementan la lógica de negocio principal
   * `CrearProcesarMensajeWhatsappService`: Gestiona la creación y actualización de mensajes
 
@@ -31,8 +30,6 @@ La aplicación sigue una arquitectura hexagonal (ports & adapters) con tres capa
   * `WhatsappMessageRepositoryAdapter`: Implementa el puerto del dominio utilizando el DAO
 * **Adaptadores JMS**: Implementan los puertos de mensajería
   * `WhatsappPublisherAdapter`: Implementa el puerto de publicación con Kafka
-* **Servicios de Infraestructura**: Implementan los puertos de servicio
-  * `WhatsappMessageService`: Implementa el puerto de procesamiento
 * **Controladores**: Punto de entrada a la aplicación
   * `EntrevistaController`: Recibe los webhooks de WhatsApp y los procesa
 * **DTOs y Mappers**: Conversión entre formatos de datos
@@ -47,7 +44,6 @@ La aplicación sigue una arquitectura hexagonal (ports & adapters) con tres capa
 4. El servicio de aplicación coordina el proceso:
    - Guarda el mensaje en MongoDB mediante el puerto `WhatsappMessageRepository`.
    - Publica el mensaje en Kafka mediante el puerto `WhatsappPublisher`.
-   - Procesa el mensaje mediante el puerto `ProcesarWhatsappMessagePort`.
    - Marca el mensaje como procesado en MongoDB.
 5. Si algo falla, el mensaje queda en estado pendiente y puede ser reprocesado.
 

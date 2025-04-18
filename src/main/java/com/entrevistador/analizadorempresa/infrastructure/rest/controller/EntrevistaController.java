@@ -57,8 +57,9 @@ public class EntrevistaController {
         return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN, "Verificación fallida"));
     }
     
-    @PostMapping("/webhook")
-    public Mono<ResponseEntity<Map<String, String>>> recibirMensajeWhatsapp(@RequestBody WhatsappWebhookDto webhookDto) {
+    @PostMapping()
+    public Mono<ResponseEntity<Map<String, String>>> recibirMensajeWhatsapp(
+            @RequestBody WhatsappWebhookDto webhookDto) {
         // Generar un ID único para esta solicitud de webhook
         String webhookRequestId = UUID.randomUUID().toString();
         log.info("[Webhook {}] Recibida solicitud POST", webhookRequestId);

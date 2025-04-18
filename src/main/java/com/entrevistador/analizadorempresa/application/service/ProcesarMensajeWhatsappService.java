@@ -3,7 +3,6 @@ package com.entrevistador.analizadorempresa.application.service;
 import com.entrevistador.analizadorempresa.application.usecases.ProcesarMensajeWhatsapp;
 import com.entrevistador.analizadorempresa.domain.model.WhatsappMessage;
 import com.entrevistador.analizadorempresa.domain.port.kafka.WhatsappPublisher;
-import com.entrevistador.analizadorempresa.domain.port.service.ProcesarWhatsappMessagePort;
 import com.entrevistador.analizadorempresa.domain.service.CrearProcesarMensajeWhatsappService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ public class ProcesarMensajeWhatsappService implements ProcesarMensajeWhatsapp {
 
     private final CrearProcesarMensajeWhatsappService crearProcesarMensajeWhatsappService;
     private final WhatsappPublisher whatsappPublisher;
-    private final ProcesarWhatsappMessagePort procesarWhatsappMessagePort;
 
     @Override
     public Mono<WhatsappMessage> ejecutar(WhatsappMessage message) {
@@ -30,9 +28,7 @@ public class ProcesarMensajeWhatsappService implements ProcesarMensajeWhatsapp {
                 // Paso 2: Publicar el mensaje en Kafka
                 .flatMap(createdMessage -> whatsappPublisher.publishIncomingMessage(createdMessage)
                         .thenReturn(createdMessage))
-                // Paso 3: Procesar el mensaje mediante el adaptador de servicio
-                .flatMap(procesarWhatsappMessagePort::process)
-                // Paso 4: Marcar el mensaje como procesado
+                // Paso 3: Marcar el mensaje como procesado directamente
                 .flatMap(crearProcesarMensajeWhatsappService::markAsProcessed)
                 .doOnSuccess(result -> log.info("Mensaje WhatsApp procesado correctamente: ID={}", message.getMessageId()))
                 .doOnError(error -> log.error("Error al procesar mensaje WhatsApp: ID={}, error={}", 
