@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Controlador para recibir y procesar webhooks de WhatsApp
+ * Esta clase es el punto de entrada a la aplicación y delega la lógica de negocio a los casos de uso
+ */
 @Slf4j
 @RestController
 @RequestMapping("/v1/whatsapp_webhook")
@@ -27,8 +31,13 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 public class EntrevistaController {
 
+    // Caso de uso de aplicación
     private final ProcesarMensajeWhatsapp procesarMensajeWhatsapp;
+    
+    // Mapper para convertir DTOs a objetos de dominio
     private final WhatsappMessageMapper whatsappMessageMapper;
+    
+    // Para serialización/deserialización
     private final ObjectMapper objectMapper;
 
     @GetMapping(params = {"hub.mode", "hub.verify_token", "hub.challenge"})

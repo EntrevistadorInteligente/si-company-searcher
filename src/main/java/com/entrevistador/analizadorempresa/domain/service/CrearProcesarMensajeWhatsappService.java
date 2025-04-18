@@ -5,6 +5,7 @@ import com.entrevistador.analizadorempresa.domain.port.repository.WhatsappMessag
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -62,5 +63,18 @@ public class CrearProcesarMensajeWhatsappService {
                         updatedMessage.getMessageId()))
                 .doOnError(error -> log.error("Error al marcar mensaje de WhatsApp como procesado: ID={}, error={}", 
                         message.getMessageId(), error.getMessage()));
+    }
+    
+    /**
+     * Busca mensajes pendientes de procesar
+     * 
+     * @return Flujo de mensajes pendientes
+     */
+    public Flux<WhatsappMessage> findPendingMessages() {
+        log.info("Buscando mensajes pendientes de procesar");
+        
+        return whatsappMessageDao.findByProcessedFalseOrderByReceivedAtAsc()
+                .doOnComplete(() -> log.info("Búsqueda de mensajes pendientes completada"))
+                .doOnError(error -> log.error("Error al buscar mensajes pendientes: {}", error.getMessage()));
     }
 } 

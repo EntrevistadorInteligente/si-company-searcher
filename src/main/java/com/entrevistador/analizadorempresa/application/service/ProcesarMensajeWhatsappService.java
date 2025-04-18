@@ -33,7 +33,7 @@ public class ProcesarMensajeWhatsappService implements ProcesarMensajeWhatsapp {
                 // Paso 3: Procesar el mensaje mediante el adaptador de servicio
                 .flatMap(procesarWhatsappMessagePort::process)
                 // Paso 4: Marcar el mensaje como procesado
-                .flatMap(createdMessage -> crearProcesarMensajeWhatsappService.markAsProcessed(createdMessage))
+                .flatMap(crearProcesarMensajeWhatsappService::markAsProcessed)
                 .doOnSuccess(result -> log.info("Mensaje WhatsApp procesado correctamente: ID={}", message.getMessageId()))
                 .doOnError(error -> log.error("Error al procesar mensaje WhatsApp: ID={}, error={}", 
                         message.getMessageId(), error.getMessage()));
@@ -43,7 +43,8 @@ public class ProcesarMensajeWhatsappService implements ProcesarMensajeWhatsapp {
     public Mono<Void> reprocesarPendientes() {
         log.info("Ejecutando caso de uso: reprocesar mensajes WhatsApp pendientes");
         
-        return whatsappMessageRepository.findByProcessedFalseOrderByReceivedAtAsc()
+        // Usamos el servicio de dominio para obtener los mensajes pendientes
+        return crearProcesarMensajeWhatsappService.findPendingMessages()
                 .flatMap(this::ejecutar)
                 .then()
                 .doOnSuccess(v -> log.info("Reprocesamiento de mensajes pendientes completado"));
