@@ -1,12 +1,5 @@
 package com.entrevistador.analizadorempresa.utils;
 
-import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Question;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.PosicionEntrevistaDto;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.EntrevistaEntity;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;

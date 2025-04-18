@@ -1,15 +1,5 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.mapper;
 
-import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.PosicionEntrevista;
-import com.entrevistador.analizadorempresa.domain.model.Question;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.MensajeAnalizadorEmpresaDto;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.PosicionEntrevistaDto;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.EntrevistaEntity;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.PreguntaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

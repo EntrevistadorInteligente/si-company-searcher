@@ -1,9 +1,5 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
-import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.io.LoadResource;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
 import lombok.RequiredArgsConstructor;

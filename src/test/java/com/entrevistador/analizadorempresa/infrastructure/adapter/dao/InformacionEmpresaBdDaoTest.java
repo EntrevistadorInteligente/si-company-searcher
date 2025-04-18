@@ -1,11 +1,6 @@
 package com.entrevistador.analizadorempresa.infrastructure.adapter.dao;
 
-import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.model.Question;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.entity.InformacionEmpresaEntity;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.AnalizadorEmpresaMapper;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.AnalizadorEmpresaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

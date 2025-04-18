@@ -1,11 +1,9 @@
 package com.entrevistador.analizadorempresa.infrastructure.rest.controller;
 
+import com.entrevistador.analizadorempresa.application.usecases.ProcesarMensajeWhatsapp;
 import com.entrevistador.analizadorempresa.domain.model.WhatsappMessage;
-import com.entrevistador.analizadorempresa.domain.service.InvestigarEmpresaService;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.WhatsappTextMessageDto;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.dto.WhatsappWebhookDto;
 import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.WhatsappMessageMapper;
-import com.entrevistador.analizadorempresa.infrastructure.services.WhatsappMessageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +27,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 public class EntrevistaController {
 
-    private final WhatsappMessageService whatsappMessageService;
-    private final InvestigarEmpresaService investigarEmpresaService;
+    private final ProcesarMensajeWhatsapp procesarMensajeWhatsapp;
     private final WhatsappMessageMapper whatsappMessageMapper;
     private final ObjectMapper objectMapper;
 
@@ -84,8 +81,8 @@ public class EntrevistaController {
                                                     // Creamos objeto de dominio a partir del DTO
                                                     WhatsappMessage whatsappMessage = whatsappMessageMapper.fromMessageDto(message, rawPayload);
                                                     
-                                                    // Procesamos el mensaje a través del servicio de dominio
-                                                    return investigarEmpresaService.processIncomingMessage(whatsappMessage);
+                                                    // Invocamos el caso de uso para procesar el mensaje
+                                                    return procesarMensajeWhatsapp.ejecutar(whatsappMessage);
                                                 });
                                         }
                                         return Mono.empty();
@@ -121,7 +118,7 @@ public class EntrevistaController {
     public Mono<ResponseEntity<Map<String, String>>> reprocesarMensajesPendientes() {
         log.info("Iniciando reprocesamiento de mensajes pendientes");
         
-        return investigarEmpresaService.reprocessPendingMessages()
+        return procesarMensajeWhatsapp.reprocesarPendientes()
                 .then(Mono.defer(() -> {
                     Map<String, String> response = new HashMap<>();
                     response.put("status", "ok");

@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 
-public interface WhatsappMessageRepository {
+public interface WhatsappMessageDao {
     
     Mono<WhatsappMessage> save(WhatsappMessage message);
     

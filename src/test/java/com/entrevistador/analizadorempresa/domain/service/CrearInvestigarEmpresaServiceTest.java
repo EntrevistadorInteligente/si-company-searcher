@@ -1,11 +1,5 @@
 package com.entrevistador.analizadorempresa.domain.service;
 
-import com.entrevistador.analizadorempresa.domain.model.InformacionEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.Interview;
-import com.entrevistador.analizadorempresa.domain.model.MensajeAnalizadorEmpresa;
-import com.entrevistador.analizadorempresa.domain.model.PosicionEntrevista;
-import com.entrevistador.analizadorempresa.domain.port.EntrevistaElasticsearch;
-import com.entrevistador.analizadorempresa.domain.port.InformacionEmpresaDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
