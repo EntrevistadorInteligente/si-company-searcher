@@ -30,11 +30,12 @@ public class WhatsappKafkaListener {
     public void consumeIncomingMessage(String jsonMessage) {
         log.info("Recibido mensaje en tópico whatsapp.incoming: {}", jsonMessage);
         try {
-            // Convierte JSON a objeto de dominio
-            WhatsappMessage message = messageMapper.fromJson(jsonMessage);
+            ObjectMapper objectMapper = new ObjectMapper();
+            WhatsappMessage mensajeAnalizador = objectMapper.readValue(jsonMessage, WhatsappMessage.class);
+            //WhatsappMessage message = messageMapper.fromJson(jsonMessage);
             
             // Guarda en MongoDB
-            messageRepository.save(message)
+            messageRepository.save(mensajeAnalizador)
                 .doOnSuccess(savedMsg -> log.info("Mensaje guardado en MongoDB: messageId={}, senderId={}", 
                                            savedMsg.getMessageId(), savedMsg.getSenderId()))
                 .doOnError(err -> log.error("Error al guardar mensaje en MongoDB: {}", err.getMessage(), err))

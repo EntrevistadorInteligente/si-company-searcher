@@ -6,8 +6,9 @@ import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.Whatsap
 import com.entrevistador.analizadorempresa.infrastructure.adapter.repository.document.WhatsappMessageDocument;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.ChangeStreamOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -34,13 +35,24 @@ public class MongoWhatsappMessageRepository implements WhatsappMessageRepository
         messagesSink = Sinks.many().multicast().onBackpressureBuffer();
         
         // Configurar Change Stream para detectar nuevos mensajes
-        reactiveMongoTemplate.changeStream(WhatsappMessageDocument.class)
-            .watchCollection("whatsappMessages")
-            .filter(event -> "insert".equals(event.getOperationType()))
-            .map(event -> mapper.toDomain(event.getBody()))
-            .doOnNext(message -> {
-                log.debug("Nuevo mensaje detectado en ChangeStream: {}", message.getMessageId());
-                messagesSink.tryEmitNext(message);
+        // Crear opciones para filtrar solo operaciones de inserción
+        ChangeStreamOptions options = ChangeStreamOptions.builder()
+            .filter(Aggregation.newAggregation(
+                Aggregation.match(
+                    Criteria.where("operationType").is("insert")
+                )
+            ))
+            .build();
+        
+        // Suscribirse al ChangeStream con las opciones configuradas
+        reactiveMongoTemplate.changeStream("whatsappMessages", options, WhatsappMessageDocument.class)
+            .doOnNext(event -> {
+                WhatsappMessageDocument document = event.getBody();
+                if (document != null) {
+                    WhatsappMessage message = mapper.toDomain(document);
+                    log.debug("Nuevo mensaje detectado en ChangeStream: {}", message.getMessageId());
+                    messagesSink.tryEmitNext(message);
+                }
             })
             .doOnError(e -> log.error("Error en ChangeStream de mensajes: {}", e.getMessage(), e))
             .subscribe();
