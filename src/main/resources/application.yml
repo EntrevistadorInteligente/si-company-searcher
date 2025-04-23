@@ -1,4 +1,8 @@
 spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/analizador_empresa}
+      auto-index-creation: true
   kafka:
     bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
     producer:
@@ -11,6 +15,11 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: com.entrevistador.analizadorempresa.domain.model
+        spring.json.type.mapping: com.entrevistador.analizadorempresa.domain.model.WhatsappMessage:com.entrevistador.analizadorempresa.domain.model.WhatsappMessage
+        spring.json.value.default.type: com.entrevistador.analizadorempresa.domain.model.WhatsappMessage
+        # Habilitar manejo de tipos de fecha/hora de Java 8
+        spring.json.use-type-info-headers: false
+        spring.json.add-type-info-headers: false
 
 kafka:
   topic:
@@ -33,4 +42,5 @@ server:
 logging:
   level:
     com.entrevistador.analizadorempresa: INFO
+    org.springframework.data.mongodb.core.MongoTemplate: INFO
     org.springframework.kafka: INFO 

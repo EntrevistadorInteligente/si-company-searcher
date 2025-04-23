@@ -2,14 +2,12 @@ package com.entrevistador.analizadorempresa.infrastructure.adapter.jms;
 
 import com.entrevistador.analizadorempresa.domain.model.WhatsappMessage;
 import com.entrevistador.analizadorempresa.domain.port.repository.WhatsappMessageRepository;
-import com.entrevistador.analizadorempresa.infrastructure.adapter.mapper.WhatsappMessageMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -17,7 +15,7 @@ import reactor.core.publisher.Mono;
 public class WhatsappKafkaListener {
 
     private final WhatsappMessageRepository messageRepository;
-    private final WhatsappMessageMapper messageMapper;
+    private final ObjectMapper objectMapper;
     
     /**
      * Consume mensajes del tópico whatsapp.incoming
@@ -28,14 +26,13 @@ public class WhatsappKafkaListener {
         groupId = "${spring.kafka.consumer.group-id}"
     )
     public void consumeIncomingMessage(String jsonMessage) {
-        log.info("Recibido mensaje en tópico whatsapp.incoming: {}", jsonMessage);
+        log.info("Recibido mensaje en tópico whatsapp.incoming");
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            WhatsappMessage mensajeAnalizador = objectMapper.readValue(jsonMessage, WhatsappMessage.class);
-            //WhatsappMessage message = messageMapper.fromJson(jsonMessage);
+            // Deserializar directamente con ObjectMapper configurado globalmente
+            WhatsappMessage message = objectMapper.readValue(jsonMessage, WhatsappMessage.class);
             
-            // Guarda en MongoDB
-            messageRepository.save(mensajeAnalizador)
+            // Guardar en MongoDB
+            messageRepository.save(message)
                 .doOnSuccess(savedMsg -> log.info("Mensaje guardado en MongoDB: messageId={}, senderId={}", 
                                            savedMsg.getMessageId(), savedMsg.getSenderId()))
                 .doOnError(err -> log.error("Error al guardar mensaje en MongoDB: {}", err.getMessage(), err))

@@ -4,6 +4,6 @@ EXPOSE 8083
 
 RUN mkdir -p /app/
 
-COPY target/analizador-empresa-0.0.1-SNAPSHOT.jar /app/analizador-empresa.jar
+COPY target/aggregator-message-0.0.1-SNAPSHOT.jar /app/aggregator-message.jar
 
-ENTRYPOINT ["java", "-jar", "/app/analizador-empresa.jar"]
+ENTRYPOINT ["java", "-jar", "/app/aggregator-message.jar"]

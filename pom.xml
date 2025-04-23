@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.entrevistador</groupId>
-    <artifactId>analizador-empresa</artifactId>
+    <artifactId>aggregator-message</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>analizador-empresa</name>
+    <name>aggregator-message</name>
     <description>Este microservicio esta encargado de analizar empresas</description>
 
     <properties>
