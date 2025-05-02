@@ -57,7 +57,11 @@ public class EntrevistaElasticsearchDao implements EntrevistaElasticsearch {
     }
 
     private String cleanValue(String value) {
-        return value.replaceAll("[\\r\\n]+", " ").trim();
+        return value
+            .replaceAll("[\\r\\n]+", " ")
+            .replaceAll("[\"\\\\]", "") // Eliminar comillas y backslashes
+            .replaceAll("[^a-zA-Z0-9\\s.,]", "") // Solo permitir alfanuméricos, espacios y algunos signos
+            .trim();
     }
 
     private String replacePlaceholders(String queryTemplate, InformacionEmpresa informacionEmpresa, boolean withCompany) {
